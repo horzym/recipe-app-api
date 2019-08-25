@@ -4,16 +4,11 @@ from django.urls import reverse
 
 from rest_framework.test import APIClient
 from rest_framework import status
-from core import models
+
 
 CREATE_USER_URL = reverse('user:create')
 TOKEN_URL = reverse('user:token')
 ME_URL = reverse('user:me')
-
-
-def sample_user(email='email@test.com', password='testpass'):
-    """Create user"""
-    return get_user_model().objects.create_user(email, password)
 
 
 def create_user(**params):
@@ -133,12 +128,3 @@ class PrivateUserApiTests(TestCase):
         self.assertEqual(self.user.name, payload['name'])
         self.assertTrue(self.user.check_password(payload['password']))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-
-    def test_user_tag_str(self):
-        """Test string tag representation"""
-        tag = models.Tag.objects.create(
-            user=sample_user(),
-            name='Unvegan'
-        )
-
-        self.assertEqual(str(tag), tag.name)
